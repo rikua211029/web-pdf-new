@@ -187,6 +187,18 @@ function loadPdf(source, name) {
 }
 
 function renderAll() {
+
+  document.getElementById('pdfSelect').onchange = e => {
+  const url = e.target.value;
+  if (!url) return;
+
+  currentUrl = url;
+  currentFile = null;
+  document.getElementById('pdfInput').value = '';
+
+  loadPdf(url, url);
+};
+  
   viewer.innerHTML = '';
   zoomLevel.textContent = Math.round(scale * 100) + '%';
 
@@ -234,4 +246,5 @@ document.getElementById('downloadBtn').onclick = () => {
 
 
 </body>
+
 </html>
