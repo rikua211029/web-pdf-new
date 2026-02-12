@@ -38,9 +38,7 @@ body {
 }
 
 .toolbar-left,
-.toolbar-right {
-  flex: 1;
-}
+.toolbar-right { flex: 1; }
 
 .toolbar-center {
   flex: 2;
@@ -75,16 +73,20 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  overflow: auto;
+  overflow: auto;   /* ← これが重要 */
   background: #999;
 }
 
-/* ズーム用iframe */
-#pdfFrame {
-  width: 100%;
-  height: 100%;
-  border: none;
+/* PDFラッパー */
+#pdfWrapper {
   transform-origin: top left;
+}
+
+/* iframe */
+#pdfFrame {
+  width: 1000px;  /* 固定幅にすることで拡大時にスクロールが出る */
+  height: 1400px;
+  border: none;
 }
 </style>
 </head>
@@ -139,30 +141,33 @@ document.getElementById("pdfSelect").onchange = function() {
   if (!this.value) return;
   currentPdf = this.value;
   zoom = 100;
-  updateViewer();
+  renderPDF();
 };
 
-function updateViewer() {
+function renderPDF() {
   fileNameLabel.textContent = currentPdf;
   zoomLevel.textContent = zoom + "%";
 
-  viewer.innerHTML =
-    `<iframe id="pdfFrame" src="${currentPdf}"></iframe>`;
+  viewer.innerHTML = `
+    <div id="pdfWrapper">
+      <iframe id="pdfFrame" src="${currentPdf}"></iframe>
+    </div>
+  `;
 
-  const frame = document.getElementById("pdfFrame");
-  frame.style.transform = `scale(${zoom / 100})`;
+  const wrapper = document.getElementById("pdfWrapper");
+  wrapper.style.transform = `scale(${zoom / 100})`;
 }
 
 document.getElementById("zoomIn").onclick = function() {
   if (!currentPdf) return;
   zoom += 10;
-  updateViewer();
+  renderPDF();
 };
 
 document.getElementById("zoomOut").onclick = function() {
   if (!currentPdf) return;
   if (zoom > 30) zoom -= 10;
-  updateViewer();
+  renderPDF();
 };
 
 document.getElementById("clearBtn").onclick = function() {
