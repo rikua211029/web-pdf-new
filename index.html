@@ -4,12 +4,8 @@
 <meta charset="UTF-8">
 <title>PDFビューア</title>
 
-  
 <meta name="viewport"
   content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#222222">
 
 <style>
 body {
@@ -49,32 +45,11 @@ body {
 .toolbar-center {
   flex: 2;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
-  white-space: nowrap;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.icon-btn {
-  width: 32px;
-  height: 32px;
-  background: #1976d2;
-  color: #fff;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.icon-btn:hover {
-  background: #1e88e5;
-}
-
-#pdfInput {
-  display: none;
 }
 
 #toolbar select,
@@ -93,172 +68,109 @@ body {
   background: #666;
 }
 
-#zoomLevel {
-  font-size: 16px;
-  min-width: 60px;
-  text-align: center;
-}
-
-/* ===== PDF表示 ===== */
 #viewer {
-  padding-top: 72px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  position: absolute;
+  top: 72px;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
-canvas {
-  display: block;
-  margin: 0 auto;
-  background: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 </style>
 </head>
 
 <body>
 
-<div id="app">
-
-  <div id="toolbar">
-    <div class="toolbar-left">
-      <select id="pdfSelect">
-        <option value="">既存のPDFを表示</option>
-  　 　 <option value="京電16スタフ.pdf">京電16スタフ.pdf</option>
-  　  　<option value="京電26スタフ.pdf">京電26スタフ.pdf</option>
-  　 　 <option value="再変115.pdf">再変115.pdf</option>
-   　　 <option value="大電5スタフ.pdf">大電5スタフ.pdf</option>
-   　　 <option value="変42スタフ.pdf">変42スタフ.pdf</option>
-  　 　 <option value="変BT34スタフ.pdf">変BT34スタフ.pdf</option>
-   　　 <option value="臨4101スタフ.pdf">臨4101スタフ.pdf</option>
-   　　 <option value="臨4304スタフ.pdf">臨4304スタフ.pdf</option>
-   　　 <option value="臨4602スタフ.pdf">臨4602スタフ.pdf</option>
-   　 　<option value="臨5104スタフ.pdf">臨5104スタフ.pdf</option>
-   　 　<option value="臨5751スタフ.pdf">臨5751スタフ.pdf</option>
-   　　 <option value="臨6017スタフ.pdf">臨6017スタフ.pdf</option>
-    　　<option value="臨6095スタフ.pdf">臨6095スタフ.pdf</option>
-        <option value="臨6110スタフ.pdf">臨6110スタフ.pdf</option>
-      </select>
-
-      <label for="pdfInput" class="icon-btn" title="PDFをアップロード">📄</label>
-      <input type="file" id="pdfInput" accept="application/pdf">
-    </div>
-
-    <div class="toolbar-center">
-      <span id="fileName">PDF未選択</span>
-    </div>
-
-    <div class="toolbar-right">
-      <button id="zoomOut">−</button>
-      <span id="zoomLevel">100%</span>
-      <button id="zoomIn">＋</button>
-      <button id="clearBtn">🗑</button>
-      <button id="downloadBtn">⬇</button>
-    </div>
+<div id="toolbar">
+  <div class="toolbar-left">
+    <select id="pdfSelect">
+      <option value="">PDFを選択</option>
+      <option value="京電16スタフ.pdf">京電16スタフ.pdf</option>
+      <option value="京電26スタフ.pdf">京電26スタフ.pdf</option>
+      <option value="再変115.pdf">再変115.pdf</option>
+      <option value="大電5スタフ.pdf">大電5スタフ.pdf</option>
+      <option value="変42スタフ.pdf">変42スタフ.pdf</option>
+      <option value="変BT34スタフ.pdf">変BT34スタフ.pdf</option>
+      <option value="臨4101スタフ.pdf">臨4101スタフ.pdf</option>
+      <option value="臨4304スタフ.pdf">臨4304スタフ.pdf</option>
+      <option value="臨4602スタフ.pdf">臨4602スタフ.pdf</option>
+      <option value="臨5104スタフ.pdf">臨5104スタフ.pdf</option>
+      <option value="臨5751スタフ.pdf">臨5751スタフ.pdf</option>
+      <option value="臨6017スタフ.pdf">臨6017スタフ.pdf</option>
+      <option value="臨6095スタフ.pdf">臨6095スタフ.pdf</option>
+      <option value="臨6110スタフ.pdf">臨6110スタフ.pdf</option>
+    </select>
   </div>
 
-  <div id="viewer"></div>
+  <div class="toolbar-center">
+    <span id="fileName">PDF未選択</span>
+  </div>
+
+  <div class="toolbar-right">
+    <button id="zoomOut">−</button>
+    <span id="zoomLevel">100%</span>
+    <button id="zoomIn">＋</button>
+    <button id="clearBtn">❌</button>
+    <button id="downloadBtn">DL</button>
+  </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+<div id="viewer"></div>
+
 <script>
+let currentPdf = "";
+let zoom = 100;
 
-  document.getElementById('pdfSelect').onchange = e => {
-  const url = e.target.value;
-  if (!url) return;
+const viewer = document.getElementById("viewer");
+const fileNameLabel = document.getElementById("fileName");
+const zoomLevel = document.getElementById("zoomLevel");
 
-  currentUrl = url;
-  currentFile = null;
-  document.getElementById('pdfInput').value = '';
-
-  loadPdf(url, url);
+document.getElementById("pdfSelect").onchange = function() {
+  if (!this.value) return;
+  currentPdf = this.value;
+  zoom = 100;
+  updateViewer();
 };
-  
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js";
 
-let pdfDoc = null;
-let scale = 1.0;
-let currentFile = null;
-let currentUrl = null;
+function updateViewer() {
+  fileNameLabel.textContent = currentPdf;
+  zoomLevel.textContent = zoom + "%";
 
-const viewer = document.getElementById('viewer');
-const fileNameLabel = document.getElementById('fileName');
-const zoomLevel = document.getElementById('zoomLevel');
-
-function loadPdf(source, name) {
-  viewer.innerHTML = '';
-  fileNameLabel.textContent = name;
-  scale = 1.0;
-
-  pdfjsLib.getDocument(source).promise.then(pdf => {
-    pdfDoc = pdf;
-    renderAll();
-  });
+  viewer.innerHTML =
+    `<iframe src="${currentPdf}#zoom=${zoom}"></iframe>`;
 }
 
-function renderAll() {
-
-  document.getElementById('pdfSelect').onchange = e => {
-  const url = e.target.value;
-  if (!url) return;
-
-  currentUrl = url;
-  currentFile = null;
-  document.getElementById('pdfInput').value = '';
-
-  loadPdf(url, url);
-};
-  
-  viewer.innerHTML = '';
-  zoomLevel.textContent = Math.round(scale * 100) + '%';
-
-  for (let i = 1; i <= pdfDoc.numPages; i++) {
-    pdfDoc.getPage(i).then(page => {
-      const vp = page.getViewport({ scale });
-      const c = document.createElement('canvas');
-      const ctx = c.getContext('2d');
-      c.width = vp.width;
-      c.height = vp.height;
-      page.render({ canvasContext: ctx, viewport: vp });
-      viewer.appendChild(c);
-    });
-  }
-}
-
-document.getElementById('pdfInput').onchange = e => {
-  const f = e.target.files[0];
-  if (!f) return;
-  currentFile = f;
-  const r = new FileReader();
-  r.onload = () => loadPdf(new Uint8Array(r.result), f.name);
-  r.readAsArrayBuffer(f);
+document.getElementById("zoomIn").onclick = function() {
+  if (!currentPdf) return;
+  zoom += 10;
+  updateViewer();
 };
 
-document.getElementById('zoomIn').onclick = () => { scale += 0.1; renderAll(); };
-document.getElementById('zoomOut').onclick = () => { if (scale > 0.4) { scale -= 0.1; renderAll(); } };
-document.getElementById('clearBtn').onclick = () => { viewer.innerHTML = ''; fileNameLabel.textContent = 'PDF未選択'; };
+document.getElementById("zoomOut").onclick = function() {
+  if (!currentPdf) return;
+  if (zoom > 30) zoom -= 10;
+  updateViewer();
+};
 
-document.getElementById('downloadBtn').onclick = () => {
-  let url = null;
-  let name = 'download.pdf';
-  if (currentFile) {
-    url = URL.createObjectURL(currentFile);
-    name = currentFile.name;
-  }
-  if (url) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = name;
-    a.click();
-  }
+document.getElementById("clearBtn").onclick = function() {
+  viewer.innerHTML = "";
+  fileNameLabel.textContent = "PDF未選択";
+  currentPdf = "";
+};
+
+document.getElementById("downloadBtn").onclick = function() {
+  if (!currentPdf) return;
+  const a = document.createElement("a");
+  a.href = currentPdf;
+  a.download = currentPdf;
+  a.click();
 };
 </script>
 
-
 </body>
-
 </html>
-
-
