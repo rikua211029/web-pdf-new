@@ -163,6 +163,18 @@ canvas {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
+
+  document.getElementById('pdfSelect').onchange = e => {
+  const url = e.target.value;
+  if (!url) return;
+
+  currentUrl = url;
+  currentFile = null;
+  document.getElementById('pdfInput').value = '';
+
+  loadPdf(url, url);
+};
+  
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
@@ -248,3 +260,4 @@ document.getElementById('downloadBtn').onclick = () => {
 </body>
 
 </html>
+
