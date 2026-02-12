@@ -68,18 +68,23 @@ body {
   background: #666;
 }
 
+/* ===== 表示エリア ===== */
 #viewer {
   position: absolute;
   top: 72px;
   left: 0;
   right: 0;
   bottom: 0;
+  overflow: auto;
+  background: #999;
 }
 
-iframe {
+/* ズーム用iframe */
+#pdfFrame {
   width: 100%;
   height: 100%;
   border: none;
+  transform-origin: top left;
 }
 </style>
 </head>
@@ -142,7 +147,10 @@ function updateViewer() {
   zoomLevel.textContent = zoom + "%";
 
   viewer.innerHTML =
-    `<iframe src="${currentPdf}#zoom=${zoom}"></iframe>`;
+    `<iframe id="pdfFrame" src="${currentPdf}"></iframe>`;
+
+  const frame = document.getElementById("pdfFrame");
+  frame.style.transform = `scale(${zoom / 100})`;
 }
 
 document.getElementById("zoomIn").onclick = function() {
