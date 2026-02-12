@@ -161,7 +161,7 @@ canvas {
   <div id="viewer"></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 <script>
 
   document.getElementById('pdfSelect').onchange = e => {
@@ -176,7 +176,7 @@ canvas {
 };
   
 pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js";
 
 let pdfDoc = null;
 let scale = 1.0;
@@ -260,4 +260,5 @@ document.getElementById('downloadBtn').onclick = () => {
 </body>
 
 </html>
+
 
